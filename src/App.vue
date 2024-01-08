@@ -11,6 +11,8 @@ import { RouterLink, RouterView } from 'vue-router'
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
       </nav>
+
+      <button class="btn">Button</button>
     </div>
   </header>
 
@@ -18,6 +20,10 @@ import { RouterLink, RouterView } from 'vue-router'
 </template>
 
 <style scoped>
+.btn {
+  @apply bg-blue-400 text-sm text-white font-mono font-light py-2 px-4 border-2 rounded border-blue-200 hover:bg-blue-500;
+}
+
 header {
   line-height: 1.5;
   max-height: 100vh;
