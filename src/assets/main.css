@@ -8,7 +8,8 @@
   :root {
     --white: #ffffff;
     --black: #000000;
-    --headerHeight: 136px;
+    --headerHeight: 70px;
+    --footerHeight: 70px;
   }
 
   html {
@@ -32,26 +33,5 @@
 
   #app {
     height: 100vh;
-  }
-
-  .app {
-    &__container {
-      display: grid;
-      grid-template-columns: 1fr;
-      grid-template-rows: 136px 1fr 164px;
-      grid-column-gap: 0px;
-      grid-row-gap: 0px;
-      height: 100%;
-    }
-
-    &__header {
-      grid-area: 1 / 1 / 2 / 2;
-    }
-    &__main {
-      grid-area: 2 / 1 / 3 / 2;
-    }
-    &__footer {
-      grid-area: 3 / 1 / 4 / 2;
-    }
   }
 }

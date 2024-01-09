@@ -1,99 +1,42 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { ref } from 'vue'
+import { RouterView } from 'vue-router'
+import AppHeader from '@/components/custom/AppHeader.vue'
+import AppFooter from '@/components/custom/AppFooter.vue'
+import AppMenu from '@/components/custom/AppMenu.vue'
+
+const menuSts = ref(false)
+
+const handleMenuOpen = (param) => {
+  menuSts.value = param
+}
 </script>
 
 <template>
-  <!--header>
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-
-      <button class="btn">Button</button>
-    </div>
-  </header-->
   <section class="app__container">
-    <header class="app__header" role="banner">App Head</header>
+    <AppHeader @menu-open="handleMenuOpen" />
+
+    <AppMenu :show-menu="menuSts" />
     <main class="app__main">
       <RouterView />
-      <button class="btn btn__large">teste</button>
     </main>
-    <footer class="app__footer" role="contentinfo">footer</footer>
+    <AppFooter />
   </section>
 </template>
 
-<style scoped>
-.btn {
-  @apply bg-blue-400 text-sm text-white font-mono font-light py-2 px-4 border-2 rounded border-blue-200 hover:bg-blue-500;
-  width: 40px;
-
-  &__large {
-    width: 80px;
-  }
-}
-
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+<style>
+.app {
+  &__container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: var(--headerHeight) 1fr var(--footerHeight);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    height: 100%;
   }
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
+  &__main {
+    grid-area: 2 / 1 / 3 / 2;
   }
 }
 </style>
