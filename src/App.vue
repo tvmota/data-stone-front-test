@@ -3,7 +3,7 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <header>
+  <!--header>
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
 
@@ -14,14 +14,25 @@ import { RouterLink, RouterView } from 'vue-router'
 
       <button class="btn">Button</button>
     </div>
-  </header>
-
-  <RouterView />
+  </header-->
+  <section class="app__container">
+    <header class="app__header" role="banner">App Head</header>
+    <main class="app__main">
+      <RouterView />
+      <button class="btn btn__large">teste</button>
+    </main>
+    <footer class="app__footer" role="contentinfo">footer</footer>
+  </section>
 </template>
 
 <style scoped>
 .btn {
   @apply bg-blue-400 text-sm text-white font-mono font-light py-2 px-4 border-2 rounded border-blue-200 hover:bg-blue-500;
+  width: 40px;
+
+  &__large {
+    width: 80px;
+  }
 }
 
 header {
