@@ -39,7 +39,7 @@ const handleClick = () => {
     }
 
     &__btn-menu {
-      @apply absolute;
+      @apply absolute bg-transparent;
       height: 32px;
       width: 32px;
       -webkit-transform: rotate(0deg);
