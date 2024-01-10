@@ -1,14 +1,16 @@
 <script setup>
-import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
 
+const props = defineProps({
+  menuShow: {
+    type: Boolean,
+    default: false
+  }
+})
 const emit = defineEmits(['menuOpen'])
 
-const menuShow = ref(false)
-
 const handleClick = () => {
-  menuShow.value = !menuShow.value
-  emit('menuOpen', menuShow.value)
+  emit('menuOpen', !props.menuShow)
 }
 </script>
 

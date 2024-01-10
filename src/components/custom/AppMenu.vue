@@ -1,24 +1,42 @@
 <script setup>
 import { RouterLink } from 'vue-router'
-
 defineProps({
-  showMenu: Boolean
+  menuShow: Boolean
 })
+defineEmits(['menuClose'])
 </script>
 
 <template>
-  <aside class="app__menu" :class="{ 'app__menu--visible': showMenu }">
+  <aside class="app__menu" :class="{ 'app__menu--visible': menuShow }">
     <section class="app__menu__overlay"></section>
     <section class="app__menu__content">
       <ul>
         <li>
-          <RouterLink active-class="app__menu__content--link-active" to="/">Home</RouterLink>
+          <RouterLink
+            active-class="app__menu__content--link-active"
+            to="/"
+            @click="$emit('menuClose')"
+          >
+            Home
+          </RouterLink>
         </li>
         <li>
-          <RouterLink active-class="app__menu__content--link-active" to="/a">Services</RouterLink>
+          <RouterLink
+            active-class="app__menu__content--link-active"
+            to="/clients"
+            @click="$emit('menuClose')"
+          >
+            Clientes
+          </RouterLink>
         </li>
         <li>
-          <RouterLink active-class="app__menu__content--link-active" to="/b">Blog</RouterLink>
+          <RouterLink
+            active-class="app__menu__content--link-active"
+            to="/Products"
+            @click="$emit('menuClose')"
+          >
+            Produtos
+          </RouterLink>
         </li>
       </ul>
     </section>
@@ -29,6 +47,7 @@ defineProps({
 .app {
   &__menu {
     @apply fixed pointer-events-none w-full h-screen;
+    z-index: 2;
 
     &__overlay {
       @apply absolute w-full bg-black left-0 opacity-0 invisible;
