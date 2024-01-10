@@ -29,7 +29,7 @@ const products = [
   <section class="products-list__content">
     <section class="products-list__content__header">
       <h2 class="products-list__content__header--title">Listagem de produtos</h2>
-      <DtButton title="Novo Produto" @click="navigate">Novo Produto</DtButton>
+      <DtButton title="Novo Produto" button-text="Novo Produto" @click="navigate" />
     </section>
     <ol class="products-list__content__list">
       <li class="products-list__content__list__item products-list__content__list__head">

@@ -58,9 +58,16 @@ const pageTitle = ref(id ? 'Editar cliente' : 'Novo cliente')
           error-msg=""
         />
         <DtToggle v-model="chkModel">Ativo</DtToggle>
-        <div class="flex gap-2 justify-end pt-10">
-          <DtButton variant="neutral" size="sm" @click="navigate">voltar</DtButton>
-          <DtButton variant="primary" size="sm" button-type="submit" @click="btn2">salvar</DtButton>
+
+        <div class="clients-edit__content__frm__actions">
+          <DtButton variant="neutral" size="sm" button-text="voltar" @click="navigate" />
+          <DtButton
+            variant="primary"
+            size="sm"
+            button-type="submit"
+            button-text="salvar"
+            @click="btn2"
+          />
         </div>
       </form>
     </section>
@@ -80,6 +87,12 @@ const pageTitle = ref(id ? 'Editar cliente' : 'Novo cliente')
 
       &--title {
         @apply text-primary font-semibold capitalize text-lg;
+      }
+    }
+
+    &__frm {
+      &__actions {
+        @apply flex gap-2 justify-end pt-10;
       }
     }
   }

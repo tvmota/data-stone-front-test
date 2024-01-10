@@ -5,7 +5,8 @@ import DtToggle from '@/components/common/DtToggle.vue'
 
 const router = useRouter()
 
-const navigate = () => router.push('/clients-edit')
+const navigateEdit = () => router.push('/clients-edit')
+const navigateAssociate = () => router.push('/associate')
 
 const clients = [
   {
@@ -54,7 +55,15 @@ const clients = [
   <section class="clients-list__content">
     <section class="clients-list__content__header">
       <h2 class="clients-list__content__header--title">Listagem de clientes</h2>
-      <DtButton title="Novo Cliente" @click="navigate">Novo cliente</DtButton>
+      <section class="clients-list__content__header__actions">
+        <DtButton
+          variant="secondary"
+          title="Novo Cliente"
+          button-text="Associar produtos"
+          @click="navigateAssociate"
+        />
+        <DtButton title="Novo Cliente" button-text="Novo cliente" @click="navigateEdit" />
+      </section>
     </section>
     <ol class="clients-list__content__list">
       <li class="clients-list__content__list__item clients-list__content__list__head">
@@ -75,6 +84,14 @@ const clients = [
               title="Editar Cliente"
             />
           </RouterLink>
+          <RouterLink :to="`/associate/${c.id}`">
+            <v-icon
+              class="clients-list__content__list__item__actions--icon"
+              name="oi-link"
+              :scale="1.5"
+              title="Associar Produtos"
+            />
+          </RouterLink>
           <DtToggle />
         </div>
       </li>
@@ -92,6 +109,10 @@ const clients = [
 
     &__header {
       @apply py-2 flex justify-between;
+
+      &__actions {
+        @apply flex gap-2;
+      }
 
       &--title {
         @apply text-primary font-semibold capitalize text-lg;

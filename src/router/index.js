@@ -30,7 +30,7 @@ const router = createRouter({
       component: () => import('../views/products/EditProducts.vue')
     },
     {
-      path: '/associate/:clientId',
+      path: '/associate/:clientId?',
       name: 'associateClientsProducts',
       component: () => import('../views/clients/AssociateProducts.vue')
     },

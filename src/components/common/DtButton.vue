@@ -6,6 +6,10 @@ const props = defineProps({
     type: String,
     default: 'button'
   },
+  buttonTitle: {
+    type: String,
+    default: ''
+  },
   buttonText: {
     type: String,
     default: ''
@@ -40,7 +44,12 @@ const getSizeClass = computed(() => {
 </script>
 
 <template>
-  <button class="dt-btn" :class="[getVariantClass, getSizeClass]" :type="buttonType">
+  <button
+    class="dt-btn"
+    :class="[getVariantClass, getSizeClass]"
+    :type="buttonType"
+    :title="buttonText || buttonTitle"
+  >
     <slot>{{ buttonText }}</slot>
   </button>
 </template>
