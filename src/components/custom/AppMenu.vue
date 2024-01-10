@@ -32,7 +32,7 @@ defineEmits(['menuClose'])
         <li>
           <RouterLink
             active-class="app__menu__content--link-active"
-            to="/Products"
+            to="/products"
             @click="$emit('menuClose')"
           >
             Produtos

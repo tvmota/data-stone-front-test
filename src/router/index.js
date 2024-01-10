@@ -15,7 +15,7 @@ const router = createRouter({
       component: () => import('../views/clients/ListClients.vue')
     },
     {
-      path: '/clients-edit',
+      path: '/clients-edit/:id?',
       name: 'cilents-edit',
       component: () => import('../views/clients/EditClients.vue')
     },
@@ -25,9 +25,14 @@ const router = createRouter({
       component: () => import('../views/products/ListProducts.vue')
     },
     {
-      path: '/products-edit',
+      path: '/products-edit/:id?',
       name: 'products-edit',
       component: () => import('../views/products/EditProducts.vue')
+    },
+    {
+      path: '/associate/:clientId',
+      name: 'associateClientsProducts',
+      component: () => import('../views/clients/AssociateProducts.vue')
     },
   ]
 })

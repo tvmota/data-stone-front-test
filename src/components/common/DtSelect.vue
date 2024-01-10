@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { computed } from 'vue'
 
 const emit = defineEmits(['update:modelValue'])
 
@@ -12,17 +12,13 @@ const props = defineProps({
     type: String,
     required: true
   },
-  fieldType: {
-    type: String,
-    default: 'text'
-  },
   fieldPlaceholder: {
     type: String,
     default: ''
   },
   fieldRequired: {
     type: Boolean,
-    default: false
+    default: true
   },
   hasError: {
     type: Boolean,
@@ -36,6 +32,10 @@ const props = defineProps({
     type: String,
     default: ''
   },
+  options: {
+    type: Array,
+    required: true
+  },
   size: {
     type: String,
     default: 'sm'
@@ -48,30 +48,36 @@ const getSizeClass = computed(() => {
     return `dt-input__${props.size}`
   }
 
-  return `dt-input__sm`
+  return `dt-btn__sm`
 })
 </script>
 
 <template>
-  <div class="dt-input">
-    <label class="dt-input--label" :class="[getSizeClass]" :for="fieldName">{{ labelTxt }}</label>
-    <input
-      class="dt-input__field" 
-      :class="{'dt-input__field__error': hasError && fieldRequired }"
-      name: fieldName
-      :placeholder="fieldPlaceholder || labelTxt"
-      :type="fieldType"
-      :value="modelValue"
+  <div class="dt-select">
+    <label class="dt-select--label" :class="[getSizeClass]" :for="fieldName">{{ labelTxt }}</label>
+    <select
       :required="fieldRequired"
-      @input="emit('update:modelValue', $event.target.value)">
-    <span v-if="hasError && fieldRequired" class="dt-input__field__error--msg">
-      {{ errorMsg }}
-		</span>
+      :name="fieldName"
+      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primary bg-slate-200"
+      @change="emit('update:modelValue', $event.target.value)"
+    >
+      <option value="" disabled :selected="!modelValue">{{ fieldPlaceholder || labelTxt }}</option>
+      <template v-if="options.length > 0">
+        <option
+          v-for="o in options"
+          :key="o.value"
+          :value="o.value"
+          :selected="modelValue === `${o.value}`"
+        >
+          {{ o.label }}
+        </option>
+      </template>
+    </select>
   </div>
 </template>
 
 <style>
-.dt-input {
+.dt-select {
   @apply mb-4;
 
   &--label {
@@ -92,7 +98,7 @@ const getSizeClass = computed(() => {
 
   &__sm {
     @apply text-sm;
-    
+
     .dt-input__field {
       @apply py-2 px-2;
     }

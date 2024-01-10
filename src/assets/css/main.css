@@ -5,6 +5,16 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --white: #ffffff;
+  --black: #000000;
+  --primary: '#001B2E';
+  --secondary: '#294C60';
+  --neutral: '#ADB6C4';
+  --headerHeight: 70px;
+  --footerHeight: 70px;
+}
+
 @layer base {
   :root {
     --white: #ffffff;

@@ -1,13 +1,17 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import Vue3Toasity from 'vue3-toastify'
+import { OhVueIcon, addIcons } from "oh-vue-icons";
+import { BiPencilSquare } from "oh-vue-icons/icons";
 import App from './App.vue'
 import router from './router'
 import './assets/css/main.css'
 import 'vue3-toastify/dist/index.css';
 
-const app = createApp(App)
+addIcons(BiPencilSquare)
 
+const app = createApp(App)
+app.component("VIcon", OhVueIcon);
 app.use(createPinia())
 app.use(router)
 app.use(Vue3Toasity,

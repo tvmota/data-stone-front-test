@@ -1,4 +1,7 @@
 <script setup>
+const uniqId = window.crypto.randomUUID()
+const emit = defineEmits(['update:modelValue'])
+
 defineProps({
   modelValue: {
     type: Boolean,
@@ -9,20 +12,18 @@ defineProps({
     default: ''
   }
 })
-
-const emit = defineEmits(['update:modelValue'])
 </script>
 
 <template>
   <label class="dt-toggle">
     <input
-      id="switch"
+      :id="uniqId"
       type="checkbox"
       class="dt-toggle__input peer"
       :checked="modelValue"
       @change="emit('update:modelValue', $event.target.checked)"
     />
-    <label for="switch" class="dt-toggle__input--hidden"></label>
+    <label :htmlFor="uniqId" class="dt-toggle__input--hidden"></label>
     <div class="dt-toggle__interactive peer"></div>
     <slot>{{ toggleTxt }}</slot>
   </label>
