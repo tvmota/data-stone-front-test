@@ -4,6 +4,7 @@ import { ref } from 'vue'
 import DtButton from '@/components/common/DtButton.vue'
 import DtSelect from '@/components/common/DtSelect.vue'
 import DtCheckbox from '@/components/common/DtCheckbox.vue'
+import DtSearch from '@/components/common/DtSearch.vue'
 
 const clients = [
   {
@@ -99,13 +100,20 @@ const modelEx = ref('')
         />
         <section>
           <p class="clients-associate__content__main--subtitle">Produtos</p>
+          <DtSearch />
           <ol class="clients-associate__content__main__list">
             <li
               v-for="p in products"
               :key="p.id"
               class="clients-associate__content__main__list__item"
             >
-              {{ p.name }}
+              <DtCheckbox v-model="chkModel2" :label-txt="p.name" />
+              <span
+                class="clients-associate__content__main__list__item--subtitle"
+                :class="{ 'clients-associate__content__main__list__item--active': p.active }"
+              >
+                {{ p.active ? 'Ativo' : 'Inativo' }}
+              </span>
             </li>
           </ol>
         </section>
@@ -140,15 +148,22 @@ const modelEx = ref('')
       @apply flex flex-col gap-8;
 
       &--subtitle {
-        @apply block text-primary font-bold mb-2;
+        @apply block text-primary font-bold mb-4;
       }
 
       &__list {
-        @apply grid gap-2 grid-cols-1 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4;
+        @apply grid gap-2 grid-cols-1 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 xs:max-h-96 xs:overflow-y-scroll;
 
         &__item {
-          @apply flex border border-neutral rounded-lg px-2 py-3 h-14 shadow-md;
-          height: 4rem;
+          @apply flex border border-neutral rounded-lg px-2 py-3 shadow-md flex-col gap-2;
+
+          &--subtitle {
+            @apply text-sm font-semibold pl-6 text-red-800;
+          }
+
+          &--active {
+            @apply text-green-900;
+          }
         }
       }
     }
