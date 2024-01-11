@@ -1,8 +1,12 @@
 <script setup>
 const uniqId = window.crypto.randomUUID()
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'handleChange'])
 
-defineProps({
+const props = defineProps({
+  hasModel: {
+    type: Boolean,
+    default: true
+  },
   modelValue: {
     type: Boolean,
     default: false
@@ -12,6 +16,14 @@ defineProps({
     default: ''
   }
 })
+
+const handleChange = (checked) => {
+  if (props.hasModel) {
+    emit('update:modelValue', checked)
+  } else {
+    emit('handleChange', checked)
+  }
+}
 </script>
 
 <template>
@@ -21,7 +33,7 @@ defineProps({
       type="checkbox"
       class="dt-toggle__input peer"
       :checked="modelValue"
-      @change="emit('update:modelValue', $event.target.checked)"
+      @change="handleChange($event.target.checked)"
     />
     <label :htmlFor="uniqId" class="dt-toggle__input--hidden"></label>
     <div class="dt-toggle__interactive peer"></div>

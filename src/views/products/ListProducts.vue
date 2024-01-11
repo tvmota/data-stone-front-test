@@ -1,29 +1,23 @@
 <script setup>
 import { RouterLink, useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import { useProductsStore } from '@/stores/products'
 import DtButton from '@/components/common/DtButton.vue'
 import DtToggle from '@/components/common/DtToggle.vue'
 
+const productsStore = useProductsStore()
+const { getProducts } = storeToRefs(productsStore)
 const router = useRouter()
 
 const navigate = () => router.push('/products-edit')
 
-const products = [
-  {
-    id: 1,
-    name: 'produto 1',
-    active: false
-  },
-  {
-    id: 2,
-    name: 'produto 2',
-    active: true
-  },
-  {
-    id: 3,
-    name: 'produto 3',
-    active: true
-  }
-]
+const changeProductStatus = (id, status) => {
+  const cloneProducts = Array.from(new Set(getProducts.value.map((p) => p)))
+  const productIdx = cloneProducts.findIndex((p) => p.id === id)
+
+  cloneProducts[productIdx] = Object.assign({}, cloneProducts[productIdx], { active: status })
+  productsStore.set(cloneProducts)
+}
 </script>
 <template>
   <section class="products-list__content">
@@ -36,7 +30,7 @@ const products = [
         <p class="products-list__content__list__item--txt">Nome</p>
         <p class="products-list__content__list__item--txt">Status</p>
       </li>
-      <li v-for="p in products" :key="p.id" class="products-list__content__list__item">
+      <li v-for="p in getProducts" :key="p.id" class="products-list__content__list__item">
         <p class="products-list__content__list__item--txt">{{ p.name }}</p>
         <div class="products-list__content__list__item__actions">
           <RouterLink :to="`/products-edit/${p.id}`">
@@ -47,7 +41,11 @@ const products = [
               title="Editar Produto"
             />
           </RouterLink>
-          <DtToggle />
+          <DtToggle
+            :has-model="false"
+            :model-value="p.active"
+            @handle-change="(val) => changeProductStatus(p.id, val)"
+          />
         </div>
       </li>
     </ol>

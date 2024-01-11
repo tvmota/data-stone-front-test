@@ -1,15 +1,45 @@
 <script setup>
 import { ref } from 'vue'
 import { RouterView } from 'vue-router'
+import { getItem } from '@/utils/storage'
+import { productStorageKey, clientStorageKey, associateStorageKey } from '@/utils/keys'
+import { useProductsStore } from '@/stores/products'
+import { useClientsStore } from '@/stores/clients'
+import { useAssociationsStore } from '@/stores/associations'
 import AppHeader from '@/components/custom/AppHeader.vue'
 import AppFooter from '@/components/custom/AppFooter.vue'
 import AppMenu from '@/components/custom/AppMenu.vue'
 
+const productsStore = useProductsStore()
+const clientsStore = useClientsStore()
+const associationsStore = useAssociationsStore()
 const menuSts = ref(false)
 
 const handleMenuOpen = (param) => {
   menuSts.value = param
 }
+const initStore = () => {
+  const prdSrc = getItem(productStorageKey)
+  const cliSrc = getItem(clientStorageKey)
+  const assocSrc = getItem(associateStorageKey)
+
+  if (prdSrc) {
+    const { products = [] } = JSON.parse(prdSrc)
+    productsStore.set(products)
+  }
+
+  if (cliSrc) {
+    const { clients = [] } = JSON.parse(cliSrc)
+    clientsStore.set(clients)
+  }
+
+  if (assocSrc) {
+    const { associations = [] } = JSON.parse(assocSrc)
+    associationsStore.set(associations)
+  }
+}
+
+initStore()
 </script>
 
 <template>

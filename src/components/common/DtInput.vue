@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'handleBlur'])
 
 const props = defineProps({
   errorMsg: {
@@ -77,6 +77,7 @@ const getHasIconStyle = computed(() => {
       :required="fieldRequired"
       :style="getHasIconStyle"
       @input="emit('update:modelValue', $event.target.value)"
+      @blur="emit('handleBlur')"
     />
     <v-icon v-if="hasIcon" class="dt-input__field__icon" :name="icon" :scale="1.4" />
     <span v-if="hasError && fieldRequired" class="dt-input__field__error--msg">
