@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+
 const showResults = ref(false)
 </script>
 <template>
@@ -14,15 +15,7 @@ const showResults = ref(false)
       />
       <v-icon class="dt-search__field__icon" name="oi-search" :scale="1.4" />
     </section>
-    <ul v-show="showResults" class="dt-search__results" @mouseleave="showResults = false">
-      <li>asdsadasd</li>
-      <li>asdsadasd</li>
-      <li>asdsadasd</li>
-      <li>asdsadasd</li>
-      <li>asdsadasd</li>
-      <li>asdsadasd</li>
-      <li>asdsadasd</li>
-    </ul>
+    <ul v-show="showResults" class="dt-search__results" @mouseleave="showResults = false"></ul>
   </section>
 </template>
 

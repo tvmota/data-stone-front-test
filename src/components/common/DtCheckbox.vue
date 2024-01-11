@@ -1,8 +1,12 @@
 <script setup>
 const uniqId = window.crypto.randomUUID()
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'handleChange'])
 
-defineProps({
+const props = defineProps({
+  hasModel: {
+    type: Boolean,
+    default: true
+  },
   modelValue: {
     type: Boolean,
     default: false
@@ -12,15 +16,23 @@ defineProps({
     default: ''
   }
 })
+
+const handleChange = (checked) => {
+  if (props.hasModel) {
+    emit('update:modelValue', checked)
+  } else {
+    emit('handleChange', checked)
+  }
+}
 </script>
 <template>
-  <div class="flex gap-2">
+  <div class="dt-checkbox">
     <input
       :id="uniqId"
       type="checkbox"
       :checked="modelValue"
       class="dt-checkbox__input peer disabled:border-steel-400 disabled:bg-steel-400"
-      @change="emit('update:modelValue', $event.target.checked)"
+      @change="handleChange($event.target.checked)"
     />
     <label :htmlFor="uniqId">
       <slot>{{ labelTxt }}</slot>
@@ -42,11 +54,10 @@ defineProps({
 
 <style>
 .dt-checkbox {
-  @apply flex gap-2;
+  @apply flex gap-2 relative;
 
   &__input {
-    @apply relative
-    shrink-0
+    @apply shrink-0
     appearance-none
     w-5
     h-5

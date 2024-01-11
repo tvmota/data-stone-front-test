@@ -1,10 +1,10 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
-import { ref } from 'vue'
+import { ref, watch, reactive } from 'vue'
 import DtButton from '@/components/common/DtButton.vue'
 import DtSelect from '@/components/common/DtSelect.vue'
 import DtCheckbox from '@/components/common/DtCheckbox.vue'
-import DtSearch from '@/components/common/DtSearch.vue'
+import DtInput from '@/components/common/DtInput.vue'
 
 const clients = [
   {
@@ -32,56 +32,88 @@ const clients = [
 const products = [
   {
     id: 1,
-    name: 'produto 1',
+    name: 'produto 1a',
     active: false
   },
   {
     id: 2,
-    name: 'produto 2',
+    name: 'produto 2s',
     active: true
   },
   {
     id: 3,
-    name: 'produto 3',
+    name: 'produto 3e',
     active: true
   },
   {
-    id: 1,
-    name: 'produto 1',
+    id: 4,
+    name: 'produto 1e',
     active: false
   },
   {
-    id: 2,
-    name: 'produto 2',
+    id: 5,
+    name: 'produto 2r',
     active: true
   },
   {
-    id: 3,
-    name: 'produto 3',
+    id: 6,
+    name: 'produto 3t',
     active: true
   },
   {
-    id: 1,
-    name: 'produto 1',
+    id: 7,
+    name: 'produto 1r',
     active: false
   },
   {
-    id: 2,
-    name: 'produto 2',
+    id: 8,
+    name: 'produto 2t',
     active: true
   },
   {
-    id: 3,
-    name: 'produto 3',
+    id: 9,
+    name: 'produto 3a',
+    active: true
+  },
+  {
+    id: 10,
+    name: 'produto 1r',
+    active: false
+  },
+  {
+    id: 11,
+    name: 'produto 2t',
+    active: true
+  },
+  {
+    id: 12,
+    name: 'produto 3a',
     active: true
   }
 ]
 
+let viewProducts = reactive(products.map((p) => p))
+
+const searchProduct = ref('')
+
 const route = useRoute()
 const router = useRouter()
 const { clientId = '' } = route.params || {}
-
 const modelEx = ref('')
+
+watch(searchProduct, (newVal = '') => {
+  if (newVal.length > 0) {
+    viewProducts = products.filter((p) =>
+      p.name.toLocaleLowerCase().includes(newVal.toLocaleLowerCase())
+    )
+  } else {
+    viewProducts = products.map((p) => p)
+  }
+})
+
+const handleSelection = (selected, product) => {
+  console.log(selected, product)
+}
 </script>
 
 <template>
@@ -100,14 +132,26 @@ const modelEx = ref('')
         />
         <section>
           <p class="clients-associate__content__main--subtitle">Produtos</p>
-          <DtSearch />
+          <DtInput
+            v-model="searchProduct"
+            field-name="searchProducts"
+            field-placeholder="Pesquisar produtos"
+            :has-icon="true"
+            icon="oi-search"
+            field-type="search"
+          />
           <ol class="clients-associate__content__main__list">
             <li
-              v-for="p in products"
+              v-for="p in viewProducts"
               :key="p.id"
               class="clients-associate__content__main__list__item"
             >
-              <DtCheckbox v-model="chkModel2" :label-txt="p.name" />
+              <DtCheckbox
+                :has-model="false"
+                :label-txt="p.name"
+                :model-value="true"
+                @handle-change="(value) => handleSelection(value, p)"
+              />
               <span
                 class="clients-associate__content__main__list__item--subtitle"
                 :class="{ 'clients-associate__content__main__list__item--active': p.active }"
@@ -152,7 +196,8 @@ const modelEx = ref('')
       }
 
       &__list {
-        @apply grid gap-2 grid-cols-1 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 xs:max-h-96 xs:overflow-y-scroll;
+        @apply grid gap-2 grid-cols-1 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 xs:max-h-80 xs:overflow-y-scroll py-1;
+        padding-right: 6px;
 
         &__item {
           @apply flex border border-neutral rounded-lg px-2 py-3 shadow-md flex-col gap-2;
