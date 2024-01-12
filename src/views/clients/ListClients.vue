@@ -1,16 +1,12 @@
 <script setup>
-import { RouterLink, useRouter } from 'vue-router'
+import { RouterLink } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useClientsStore } from '@/stores/clients'
 import DtButton from '@/components/common/DtButton.vue'
 import DtToggle from '@/components/common/DtToggle.vue'
 
-const router = useRouter()
 const clientsStore = useClientsStore()
 const { getClients } = storeToRefs(clientsStore)
-
-const navigateEdit = () => router.push('/clients-edit')
-const navigateAssociate = () => router.push('/associate')
 
 const changeClientStatus = (id, status) => {
   const cloneClients = Array.from(new Set(getClients.value))
@@ -25,12 +21,18 @@ const changeClientStatus = (id, status) => {
       <h2 class="clients-list__content__header--title">Listagem de clientes</h2>
       <section class="clients-list__content__header__actions">
         <DtButton
+          button-text="Associar produtos"
+          :is-link="true"
           variant="secondary"
           title="Novo Cliente"
-          button-text="Associar produtos"
-          @click="navigateAssociate"
+          to="/associate"
         />
-        <DtButton title="Novo Cliente" button-text="Novo cliente" @click="navigateEdit" />
+        <DtButton
+          :is-link="true"
+          button-text="Novo cliente"
+          title="Novo Cliente"
+          to="/clients-edit"
+        />
       </section>
     </section>
     <section class="flex flex-col">

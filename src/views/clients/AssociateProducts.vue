@@ -17,8 +17,6 @@ const associationsStore = useAssociationsStore()
 const { getClients } = storeToRefs(clientsStore)
 const { getProducts } = storeToRefs(productsStore)
 
-const navigate = () => router.push('/clients')
-
 let viewProducts = reactive(Array.from(new Set(getProducts.value)))
 const srcClients = getClients.value.map((c) => ({ label: c.name, value: c.id }))
 const searchProduct = ref('')
@@ -154,7 +152,13 @@ onMounted(() => {
       </section>
       <section class="clients-associate__content__footer">
         <section class="clients-associate__content__footer__actions">
-          <DtButton variant="neutral" size="sm" button-text="voltar" @click="navigate" />
+          <DtButton
+            button-text="voltar"
+            :is-link="true"
+            size="sm"
+            to="/clients"
+            variant="neutral"
+          />
           <DtButton
             variant="primary"
             size="sm"

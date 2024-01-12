@@ -12,7 +12,6 @@ import DtButton from '@/components/common/DtButton.vue'
 const route = useRoute()
 const router = useRouter()
 const productsStore = useProductsStore()
-const navigate = () => router.push('/products')
 const { id = '' } = route.params || {}
 
 const pageTitle = ref(id ? 'Editar produto' : 'Novo produto')
@@ -98,7 +97,13 @@ if (id) {
         />
         <DtToggle v-model="productModel.active">Ativo</DtToggle>
         <div class="products-edit__content__frm__actions">
-          <DtButton variant="neutral" size="sm" button-text="voltar" @click="navigate" />
+          <DtButton
+            variant="neutral"
+            size="sm"
+            button-text="voltar"
+            :is-link="true"
+            url="/products"
+          />
           <DtButton
             variant="primary"
             size="sm"

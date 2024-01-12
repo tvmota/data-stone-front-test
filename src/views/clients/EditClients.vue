@@ -12,7 +12,6 @@ import DtButton from '@/components/common/DtButton.vue'
 const route = useRoute()
 const router = useRouter()
 const clientsStore = useClientsStore()
-const navigate = () => router.push('/clients')
 const { id = '' } = route.params || {}
 
 const pageTitle = ref(id ? 'Editar cliente' : 'Novo cliente')
@@ -142,7 +141,13 @@ if (id) {
         <DtToggle v-model="clientModel.active">Ativo</DtToggle>
 
         <div class="clients-edit__content__frm__actions">
-          <DtButton variant="neutral" size="sm" button-text="voltar" @click="navigate" />
+          <DtButton
+            variant="neutral"
+            size="sm"
+            button-text="voltar"
+            :is-link="true"
+            url="/clients"
+          />
           <DtButton
             variant="primary"
             size="sm"

@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue'
+import { RouterLink } from 'vue-router'
 
 const props = defineProps({
   buttonType: {
@@ -14,6 +15,10 @@ const props = defineProps({
     type: String,
     default: ''
   },
+  isLink: {
+    type: Boolean,
+    default: false
+  },
   variant: {
     type: String,
     default: 'primary'
@@ -21,6 +26,10 @@ const props = defineProps({
   size: {
     type: String,
     default: 'sm'
+  },
+  url: {
+    type: String,
+    default: ''
   }
 })
 
@@ -44,11 +53,24 @@ const getSizeClass = computed(() => {
 </script>
 
 <template>
+  <RouterLink
+    v-if="isLink"
+    class="dt-btn"
+    :class="[getVariantClass, getSizeClass]"
+    :title="buttonText || buttonTitle"
+    :to="url"
+    v-bind="$attrs"
+  >
+    <slot>{{ buttonText }}</slot>
+  </RouterLink>
+
   <button
+    v-else
     class="dt-btn"
     :class="[getVariantClass, getSizeClass]"
     :type="buttonType"
     :title="buttonText || buttonTitle"
+    v-bind="$attrs"
   >
     <slot>{{ buttonText }}</slot>
   </button>
