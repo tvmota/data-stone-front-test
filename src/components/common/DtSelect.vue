@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['handleChange'])
 
 const props = defineProps({
   errorMsg: {
@@ -58,8 +58,9 @@ const getSizeClass = computed(() => {
     <select
       :required="fieldRequired"
       :name="fieldName"
-      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primary bg-slate-200"
-      @change="emit('update:modelValue', $event.target.value)"
+      class="dt-select__field"
+      :class="[`${hasError && fieldRequired ? 'dt-select__field__error' : ''}`]"
+      @change="emit('handleChange', $event.target.value)"
     >
       <option value="" disabled :selected="!modelValue">{{ fieldPlaceholder || labelTxt }}</option>
       <template v-if="options.length > 0">
@@ -73,6 +74,9 @@ const getSizeClass = computed(() => {
         </option>
       </template>
     </select>
+    <span v-if="hasError && fieldRequired" class="dt-select__field__error--msg">
+      {{ errorMsg }}
+    </span>
   </div>
 </template>
 

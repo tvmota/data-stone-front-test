@@ -1,119 +1,106 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
-import { ref, watch, reactive } from 'vue'
+import { onMounted, ref, watch, reactive } from 'vue'
+import { storeToRefs } from 'pinia'
+import { toast } from 'vue3-toastify'
+import { useClientsStore } from '@/stores/clients'
+import { useProductsStore } from '@/stores/products'
+import { useAssociationsStore } from '@/stores/associations'
 import DtButton from '@/components/common/DtButton.vue'
 import DtSelect from '@/components/common/DtSelect.vue'
 import DtCheckbox from '@/components/common/DtCheckbox.vue'
 import DtInput from '@/components/common/DtInput.vue'
 
-const clients = [
-  {
-    value: 1,
-    label: 'cliente 1'
-  },
-  {
-    value: 2,
-    label: 'cliente 2'
-  },
-  {
-    value: 3,
-    label: 'cliente 3'
-  },
-  {
-    value: 4,
-    label: 'cliente 4'
-  },
-  {
-    value: 5,
-    label: 'cliente 5'
-  }
-]
+const clientsStore = useClientsStore()
+const productsStore = useProductsStore()
+const associationsStore = useAssociationsStore()
+const { getClients } = storeToRefs(clientsStore)
+const { getProducts } = storeToRefs(productsStore)
 
-const products = [
-  {
-    id: 1,
-    name: 'produto 1a',
-    active: false
-  },
-  {
-    id: 2,
-    name: 'produto 2s',
-    active: true
-  },
-  {
-    id: 3,
-    name: 'produto 3e',
-    active: true
-  },
-  {
-    id: 4,
-    name: 'produto 1e',
-    active: false
-  },
-  {
-    id: 5,
-    name: 'produto 2r',
-    active: true
-  },
-  {
-    id: 6,
-    name: 'produto 3t',
-    active: true
-  },
-  {
-    id: 7,
-    name: 'produto 1r',
-    active: false
-  },
-  {
-    id: 8,
-    name: 'produto 2t',
-    active: true
-  },
-  {
-    id: 9,
-    name: 'produto 3a',
-    active: true
-  },
-  {
-    id: 10,
-    name: 'produto 1r',
-    active: false
-  },
-  {
-    id: 11,
-    name: 'produto 2t',
-    active: true
-  },
-  {
-    id: 12,
-    name: 'produto 3a',
-    active: true
-  }
-]
+const navigate = () => router.push('/clients')
 
-let viewProducts = reactive(products.map((p) => p))
-
+let viewProducts = reactive(Array.from(new Set(getProducts.value)))
+const srcClients = getClients.value.map((c) => ({ label: c.name, value: c.id }))
 const searchProduct = ref('')
 
 const route = useRoute()
 const router = useRouter()
 const { clientId = '' } = route.params || {}
-const modelEx = ref('')
+const clientModel = reactive({
+  id: '',
+  error: ''
+})
+const productsModel = reactive({
+  products: []
+})
+
+const successAlert = (msg) =>
+  toast(msg, {
+    type: 'success',
+    position: toast.POSITION.TOP_RIGHT,
+    onClose: () => router.push('/clients')
+  })
+
+const handleClientSelectChange = (val) => {
+  clientModel.id = val
+  if (val) {
+    clientModel.error = ''
+  }
+}
+
+const handleSelection = (selected, product) => {
+  let { products } = productsModel
+
+  if (selected) {
+    productsModel.products.push(product.id)
+  } else {
+    productsModel.products.splice(products.indexOf(product.id), 1)
+  }
+}
+
+const handleSaveAssociation = () => {
+  if (clientModel.id) {
+    if (productsModel.products.length > 0) {
+      associationsStore.add({
+        id: window.crypto.randomUUID(),
+        idClient: clientModel.id,
+        idProducts: productsModel.products
+      })
+      successAlert(clientId ? 'Produtos alterados com sucesso' : 'Produtos associados com sucesso')
+    } else {
+      toast('Selecionar ao menos um produto', {
+        type: 'warning',
+        position: toast.POSITION.TOP_RIGHT
+      })
+    }
+  } else {
+    clientModel.error = 'Selecionar um cliente para associar'
+  }
+}
+
+const hasProduct = (idProduct) => {
+  return productsModel.products.indexOf(idProduct) >= 0
+}
 
 watch(searchProduct, (newVal = '') => {
   if (newVal.length > 0) {
-    viewProducts = products.filter((p) =>
+    viewProducts = getProducts.value.filter((p) =>
       p.name.toLocaleLowerCase().includes(newVal.toLocaleLowerCase())
     )
   } else {
-    viewProducts = products.map((p) => p)
+    viewProducts = getProducts.value.map((p) => p)
   }
 })
 
-const handleSelection = (selected, product) => {
-  console.log(selected, product)
-}
+onMounted(() => {
+  if (clientId) {
+    const association = associationsStore.getAssociationByClientId(clientId)
+    clientModel.id = clientId
+    if (association) {
+      productsModel.products = Array.from(new Set(association.idProducts))
+    }
+  }
+})
 </script>
 
 <template>
@@ -124,11 +111,14 @@ const handleSelection = (selected, product) => {
       </section>
       <section class="clients-associate__content__main">
         <DtSelect
-          v-model="modelEx"
           field-name="teste"
           label-txt="Clientes"
+          :has-error="clientModel.error.length"
           field-placeholder="Selecionar cliente"
-          :options="clients"
+          :options="srcClients"
+          :error-msg="clientModel.error"
+          :model-value="clientModel.id"
+          @handle-change="(value) => handleClientSelectChange(value)"
         />
         <section>
           <p class="clients-associate__content__main--subtitle">Produtos</p>
@@ -149,7 +139,7 @@ const handleSelection = (selected, product) => {
               <DtCheckbox
                 :has-model="false"
                 :label-txt="p.name"
-                :model-value="true"
+                :model-value="hasProduct(p.id)"
                 @handle-change="(value) => handleSelection(value, p)"
               />
               <span
@@ -164,8 +154,13 @@ const handleSelection = (selected, product) => {
       </section>
       <section class="clients-associate__content__footer">
         <section class="clients-associate__content__footer__actions">
-          <DtButton variant="neutral" size="sm" button-text="voltar" />
-          <DtButton variant="primary" size="sm" button-text="salvar" />
+          <DtButton variant="neutral" size="sm" button-text="voltar" @click="navigate" />
+          <DtButton
+            variant="primary"
+            size="sm"
+            button-text="salvar"
+            @click="handleSaveAssociation"
+          />
         </section>
       </section>
     </section>
