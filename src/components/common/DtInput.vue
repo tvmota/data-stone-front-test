@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue'
+import { vMaska } from 'maska'
 
 const emit = defineEmits(['update:modelValue', 'handleBlur'])
 
@@ -32,11 +33,19 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  hasMask: {
+    type: Boolean,
+    default: false
+  },
   icon: {
     type: String,
     default: ''
   },
   labelTxt: {
+    type: String,
+    default: ''
+  },
+  mask: {
     type: String,
     default: ''
   },
@@ -68,6 +77,7 @@ const getHasIconStyle = computed(() => {
   <div class="dt-input" :class="[getSizeClass]">
     <label class="dt-input--label" :class="[getSizeClass]" :for="fieldName">{{ labelTxt }}</label>
     <input
+      v-if="!hasMask"
       class="dt-input__field"
       :class="[`${hasError && fieldRequired ? 'dt-input__field__error' : ''}`]"
       :name="fieldName"
@@ -77,6 +87,21 @@ const getHasIconStyle = computed(() => {
       :required="fieldRequired"
       :style="getHasIconStyle"
       @input="emit('update:modelValue', $event.target.value)"
+      @blur="emit('handleBlur')"
+    />
+    <input
+      v-else
+      v-maska
+      class="dt-input__field"
+      :class="[`${hasError && fieldRequired ? 'dt-input__field__error' : ''}`]"
+      :data-maska="mask"
+      :name="fieldName"
+      :placeholder="fieldPlaceholder || labelTxt"
+      :type="fieldType"
+      :value="modelValue"
+      :required="fieldRequired"
+      :style="getHasIconStyle"
+      @maska="(evt) => emit('update:modelValue', evt.detail.masked)"
       @blur="emit('handleBlur')"
     />
     <v-icon v-if="hasIcon" class="dt-input__field__icon" :name="icon" :scale="1.4" />

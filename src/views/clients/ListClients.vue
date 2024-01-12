@@ -1,55 +1,23 @@
 <script setup>
 import { RouterLink, useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import { useClientsStore } from '@/stores/clients'
 import DtButton from '@/components/common/DtButton.vue'
 import DtToggle from '@/components/common/DtToggle.vue'
 
 const router = useRouter()
+const clientsStore = useClientsStore()
+const { getClients } = storeToRefs(clientsStore)
 
 const navigateEdit = () => router.push('/clients-edit')
 const navigateAssociate = () => router.push('/associate')
 
-const clients = [
-  {
-    id: 1,
-    name: 'cliente 1',
-    document: '111222333',
-    phone: '11 999998888',
-    email: 'cliente1@email.com',
-    active: false
-  },
-  {
-    id: 2,
-    name: 'cliente 2',
-    document: '111222333',
-    phone: '11 999998888',
-    email: 'cliente2@email.com',
-    active: false
-  },
-  {
-    id: 3,
-    name: 'cliente 3',
-    document: '111222333',
-    phone: '11 999998888',
-    email: 'cliente3@email.com',
-    active: true
-  },
-  {
-    id: 4,
-    name: 'cliente 4',
-    document: '111222333',
-    phone: '11 999998888',
-    email: 'cliente4@email.com',
-    active: false
-  },
-  {
-    id: 5,
-    name: 'cliente 5',
-    document: '111222333',
-    phone: '11 999998888',
-    email: 'cliente5@email.com',
-    active: true
-  }
-]
+const changeClientStatus = (id, status) => {
+  const cloneClients = Array.from(new Set(getClients.value))
+  const clientIdx = cloneClients.findIndex((c) => c.id === id)
+  cloneClients[clientIdx] = Object.assign({}, cloneClients[clientIdx], { active: status })
+  clientsStore.set(cloneClients)
+}
 </script>
 <template>
   <section class="clients-list__content">
@@ -65,37 +33,43 @@ const clients = [
         <DtButton title="Novo Cliente" button-text="Novo cliente" @click="navigateEdit" />
       </section>
     </section>
-    <ol class="clients-list__content__list">
-      <li class="clients-list__content__list__item clients-list__content__list__head">
+    <section class="flex flex-col">
+      <section class="clients-list__content__list__head">
         <p class="clients-list__content__list__item--txt">Nome</p>
         <p class="clients-list__content__list__item--txt">Status</p>
-      </li>
-      <li v-for="c in clients" :key="c.id" class="clients-list__content__list__item">
-        <section>
-          <p class="clients-list__content__list__item--txt">{{ c.name }}</p>
-          <span class="clients-list__content__list__item--subTxt">{{ c.email }}</span>
-        </section>
-        <div class="clients-list__content__list__item__actions">
-          <RouterLink :to="`/clients-edit/${c.id}`">
-            <v-icon
-              class="clients-list__content__list__item__actions--icon"
-              name="bi-pencil-square"
-              :scale="1.5"
-              title="Editar Cliente"
+      </section>
+      <ol class="clients-list__content__list">
+        <li v-for="c in getClients" :key="c.id" class="clients-list__content__list__item">
+          <section>
+            <p class="clients-list__content__list__item--txt">{{ c.name }}</p>
+            <span class="clients-list__content__list__item--subTxt">{{ c.email }}</span>
+          </section>
+          <div class="clients-list__content__list__item__actions">
+            <RouterLink :to="`/clients-edit/${c.id}`">
+              <v-icon
+                class="clients-list__content__list__item__actions--icon"
+                name="bi-pencil-square"
+                :scale="1.5"
+                title="Editar Cliente"
+              />
+            </RouterLink>
+            <RouterLink :to="`/associate/${c.id}`">
+              <v-icon
+                class="clients-list__content__list__item__actions--icon"
+                name="oi-link"
+                :scale="1.5"
+                title="Associar Produtos"
+              />
+            </RouterLink>
+            <DtToggle
+              :has-model="false"
+              :model-value="c.active"
+              @handle-change="(val) => changeClientStatus(c.id, val)"
             />
-          </RouterLink>
-          <RouterLink :to="`/associate/${c.id}`">
-            <v-icon
-              class="clients-list__content__list__item__actions--icon"
-              name="oi-link"
-              :scale="1.5"
-              title="Associar Produtos"
-            />
-          </RouterLink>
-          <DtToggle />
-        </div>
-      </li>
-    </ol>
+          </div>
+        </li>
+      </ol>
+    </section>
   </section>
 </template>
 
@@ -120,7 +94,8 @@ const clients = [
     }
 
     &__list {
-      @apply flex flex-col gap-3;
+      @apply flex flex-col gap-3 overflow-y-scroll py-1 pr-1;
+      max-height: 480px;
 
       &__item {
         @apply flex justify-between py-3 px-8 shadow-sm rounded-lg border border-slate-300;
@@ -144,7 +119,7 @@ const clients = [
       }
 
       &__head {
-        @apply bg-slate-300;
+        @apply flex justify-between bg-slate-300 py-3 px-8 shadow-sm rounded-lg border border-slate-300 mb-4;
       }
     }
   }

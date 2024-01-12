@@ -40,7 +40,7 @@ const handleSubmit = async () => {
     if (!id) {
       const findProduct = productsStore.getProductByName(productModel.name)
       if (!findProduct) {
-        productsStore.add(Object.assign({}, { id: window.crypto.randomUUID() }, productModel))
+        productsStore.add(Object.assign({}, productModel, { id: window.crypto.randomUUID() }))
         successAlert('Produto cadastrado com sucesso')
       } else {
         toast('Já existe um produto cadastrado com o mesmo nome', {
@@ -49,7 +49,7 @@ const handleSubmit = async () => {
         })
       }
     } else {
-      const cloneProducts = Array.from(new Set(productsStore.getProducts.map((p) => p)))
+      const cloneProducts = Array.from(new Set(productsStore.getProducts))
       const productIdx = cloneProducts.findIndex((p) => p.id === id)
 
       cloneProducts[productIdx] = productModel
@@ -72,7 +72,7 @@ const cleanErr = () => {
 }
 
 if (id) {
-  const findProduct = deepClone(productsStore.getProducts.find((p) => p.id === id))
+  const findProduct = deepClone(productsStore.getProductById(id))
   productModel.id = findProduct.id
   productModel.name = findProduct.name
   productModel.active = findProduct.active

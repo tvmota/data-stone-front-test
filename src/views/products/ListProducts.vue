@@ -12,7 +12,7 @@ const router = useRouter()
 const navigate = () => router.push('/products-edit')
 
 const changeProductStatus = (id, status) => {
-  const cloneProducts = Array.from(new Set(getProducts.value.map((p) => p)))
+  const cloneProducts = Array.from(new Set(getProducts.value))
   const productIdx = cloneProducts.findIndex((p) => p.id === id)
 
   cloneProducts[productIdx] = Object.assign({}, cloneProducts[productIdx], { active: status })
@@ -25,30 +25,34 @@ const changeProductStatus = (id, status) => {
       <h2 class="products-list__content__header--title">Listagem de produtos</h2>
       <DtButton title="Novo Produto" button-text="Novo Produto" @click="navigate" />
     </section>
-    <ol class="products-list__content__list">
-      <li class="products-list__content__list__item products-list__content__list__head">
+    <section class="flex flex-col">
+      <section class="products-list__content__list__head">
         <p class="products-list__content__list__item--txt">Nome</p>
         <p class="products-list__content__list__item--txt">Status</p>
-      </li>
-      <li v-for="p in getProducts" :key="p.id" class="products-list__content__list__item">
-        <p class="products-list__content__list__item--txt">{{ p.name }}</p>
-        <div class="products-list__content__list__item__actions">
-          <RouterLink :to="`/products-edit/${p.id}`">
-            <v-icon
-              class="products-list__content__list__item__actions--icon"
-              name="bi-pencil-square"
-              :scale="1.5"
-              title="Editar Produto"
+      </section>
+      <ol class="products-list__content__list">
+        <!--li class="products-list__content__list__item products-list__content__list__head">
+        </li-->
+        <li v-for="p in getProducts" :key="p.id" class="products-list__content__list__item">
+          <p class="products-list__content__list__item--txt">{{ p.name }}</p>
+          <div class="products-list__content__list__item__actions">
+            <RouterLink :to="`/products-edit/${p.id}`">
+              <v-icon
+                class="products-list__content__list__item__actions--icon"
+                name="bi-pencil-square"
+                :scale="1.5"
+                title="Editar Produto"
+              />
+            </RouterLink>
+            <DtToggle
+              :has-model="false"
+              :model-value="p.active"
+              @handle-change="(val) => changeProductStatus(p.id, val)"
             />
-          </RouterLink>
-          <DtToggle
-            :has-model="false"
-            :model-value="p.active"
-            @handle-change="(val) => changeProductStatus(p.id, val)"
-          />
-        </div>
-      </li>
-    </ol>
+          </div>
+        </li>
+      </ol>
+    </section>
   </section>
 </template>
 
@@ -69,7 +73,8 @@ const changeProductStatus = (id, status) => {
     }
 
     &__list {
-      @apply flex flex-col gap-3;
+      @apply flex flex-col gap-3 overflow-y-scroll py-1 pr-2;
+      max-height: 480px;
 
       &__item {
         @apply flex justify-between py-3 px-8 shadow-sm rounded-lg border border-slate-300;
@@ -89,7 +94,7 @@ const changeProductStatus = (id, status) => {
       }
 
       &__head {
-        @apply bg-slate-300;
+        @apply flex justify-between bg-slate-300 py-3 px-8 shadow-sm rounded-lg border border-slate-300 mb-4;
       }
     }
   }
