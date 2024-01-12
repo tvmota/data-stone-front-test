@@ -1,4 +1,4 @@
-# 🛒 [data-stone-front-test](https://app.com)
+# 🛒 [data-stone-front-test](https://dt-stone-app-test.netlify.app/)&nbsp;&nbsp;[![Netlify Status](https://api.netlify.com/api/v1/badges/bf14c321-faa0-4e4a-807f-78e109819faf/deploy-status)](https://app.netlify.com/sites/dt-stone-app-test/deploys)
 
 Projeto para o teste de frontend da data-stone criado com o scafolding padrão do vue [Create Vue](https://github.com/vuejs/create-vue).
 
