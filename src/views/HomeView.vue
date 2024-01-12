@@ -1,66 +1,116 @@
 <script setup>
-import { ref } from 'vue'
-import { toast } from 'vue3-toastify'
 import DtButton from '@/components/common/DtButton.vue'
-import DtInput from '@/components/common/DtInput.vue'
-import DtToggle from '@/components/common/DtToggle.vue'
-import DtCheckbox from '@/components/common/DtCheckbox.vue'
-import DtSelect from '@/components/common/DtSelect.vue'
-
-const modelEx = ref('')
-const modelEx2 = ref('')
-const chkModel = ref(!true)
-const chkModel2 = ref(true)
-
-const btn1 = () =>
-  toast('Wow so easy !', {
-    autoClose: 1000,
-    position: toast.POSITION.TOP_RIGHT
-  })
-const btn2 = () => console.log('click btn 2')
-const options = [
-  { value: 1, label: 'val 1' },
-  { value: 2, label: 'val 2' },
-  { value: 3, label: 'val 3' }
-]
 </script>
+
 <template>
-  <section>
-    <DtButton variant="primary" size="sm" @click="btn1">Button 1</DtButton>
-    <DtButton variant="secondary" size="sm" @click="btn2">Button 2</DtButton>
-    <DtToggle v-model="chkModel">text</DtToggle>
-    <DtCheckbox v-model="chkModel2" />
-    <DtInput
-      v-model="modelEx"
-      field-name="teste"
-      field-placeholder="teste"
-      label-txt="Teste"
-      :field-required="true"
-      :has-error="true"
-      error-msg="Teste"
-    />
-    <!--select
-      required
-      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primary bg-slate-200"
-    >
-      <option value="" disabled selected>Open this select menu</option>
-      <option value="1">One</option>
-      <option value="2">Two</option>
-      <option value="3">Three</option>
-    </select-->
-    <DtSelect v-model="modelEx2" field-name="teste" label-txt="Teste" :options="options" />
+  <section class="home-view">
+    <section class="home-view__content">
+      <div class="home-view__content__header">
+        <h2 class="home-view__content__header--subtitle">Opções para gerenciar o shop</h2>
+        <h1 class="home-view__content__header--title">Shop app home</h1>
+      </div>
+
+      <div class="home-view__content__main">
+        <div class="home-view__content__main__card">
+          <div class="home-view__content__main__card__wrapper">
+            <div class="home-view__content__main__card__wrapper__head">
+              <div class="home-view__content__main__card__wrapper__head__logo">
+                <v-icon name="bi-pencil-square" :scale="1.2" title="Editar Produto" />
+              </div>
+              <h2 class="home-view__content__main__card__wrapper__head--title">Clientes</h2>
+            </div>
+            <div class="home-view__content__main__card__wrapper__body">
+              <p class="home-view__content__main__card__wrapper__body--txt">
+                Aqui você pode gerenciar os dados dos clientes na plataforma
+              </p>
+              <div class="home-view__content__main__card__wrapper__body__actions">
+                <DtButton button-text="Gerenciar Clientes" :is-link="true" to="/clients"></DtButton>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="home-view__content__main__card">
+          <div class="home-view__content__main__card__wrapper">
+            <div class="home-view__content__main__card__wrapper__head">
+              <div class="home-view__content__main__card__wrapper__head__logo">
+                <v-icon name="bi-box-seam" :scale="1.2" title="Editar Produto" />
+              </div>
+              <h2 class="home-view__content__main__card__wrapper__head--title">Produtos</h2>
+            </div>
+            <div class="home-view__content__main__card__wrapper__body">
+              <p class="home-view__content__main__card__wrapper__body--txt">
+                Aqui você pode gerenciar os dados dos Produtos na plataforma
+              </p>
+              <div class="home-view__content__main__card__wrapper__body__actions">
+                <DtButton
+                  button-text="Gerenciar Produtos"
+                  :is-link="true"
+                  to="/products"
+                ></DtButton>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </section>
 </template>
 
 <style>
-select:invalid {
-  color: gray;
-}
+.home-view {
+  @apply text-gray-600;
 
-option[value=''][disabled] {
-  display: none;
-}
-option {
-  color: #000;
+  &__content {
+    @apply container px-5 py-24 mx-auto;
+
+    &__header {
+      @apply flex flex-col text-center w-full mb-20;
+
+      &--subtitle {
+        @apply text-xs text-secondary tracking-widest font-medium mb-1 uppercase;
+      }
+
+      &--title {
+        @apply sm:text-3xl text-2xl font-medium text-primary uppercase;
+      }
+    }
+
+    &__main {
+      @apply flex flex-wrap -m-4;
+
+      &__card {
+        @apply p-4 md:w-1/2;
+
+        &__wrapper {
+          @apply flex rounded-lg h-full bg-slate-300 bg-opacity-70 p-8 flex-col;
+
+          &__head {
+            @apply flex items-center mb-3;
+
+            &__logo {
+              @apply w-8 h-8 mr-3 inline-flex items-center justify-center rounded-full bg-primary text-white flex-shrink-0;
+            }
+
+            &__title {
+              @apply text-primary text-lg font-medium;
+            }
+          }
+
+          &__body {
+            @apply flex flex-col flex-grow gap-4;
+
+            &--txt {
+              @apply leading-relaxed text-base;
+            }
+
+            &__actions {
+              @apply flex justify-end;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 </style>

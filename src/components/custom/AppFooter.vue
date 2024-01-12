@@ -12,7 +12,7 @@ defineProps({
     <div class="app__footer__content">
       <a
         class="app__footer__content--title"
-        href="https://github.com/tvmota/svelte-parcel"
+        href="https://github.com/tvmota/data-stone-front-test"
         target="blank"
         title="{footerTitle}"
       >

@@ -50,7 +50,7 @@ initStore()
     <main class="app__main">
       <RouterView />
     </main>
-    <AppFooter />
+    <AppFooter footer-title="@Tiago Mota / data-stone-front-test" />
   </section>
 </template>
 
