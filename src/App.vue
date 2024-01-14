@@ -48,13 +48,39 @@ initStore()
 
     <AppMenu :menu-show="menuSts" @menu-close="handleMenuOpen(false)" />
     <main class="app__main">
-      <RouterView />
+      <router-view v-slot="{ Component }">
+        <transition name="fade" mode="out-in">
+          <component :is="Component" :key="$route.path" />
+        </transition>
+      </router-view>
     </main>
     <AppFooter footer-title="@Tiago Mota / data-stone-front-test" />
   </section>
 </template>
 
 <style>
+.slide-enter-active,
+.slide-leave-active {
+  transition:
+    opacity 1s,
+    transform 1s;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  opacity: 0;
+  transform: translateX(-30%);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 .app {
   &__container {
     display: grid;
